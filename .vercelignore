@@ -1,0 +1,7 @@
+main.py
+pyproject.toml
+poetry.lock
+VENV.md
+attached_assets/
+.agents/
+.local/
