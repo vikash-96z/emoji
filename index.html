@@ -222,11 +222,76 @@ const categories = [
   }
 ];
 
+// ── Emoji name database for search ──────────────────────────────────────────
+const emojiNames = {
+  "😀":"grinning face happy smile","😃":"smiley big eyes happy","😄":"grin smile happy","😁":"beaming grin teeth","😆":"laughing squint happy","😅":"sweat smile nervous laugh","🤣":"rolling floor laughing rofl","😂":"joy tears laugh crying funny","🙂":"slightly smiling face","🙃":"upside down face silly","😉":"winking face flirt","😊":"smiling blush happy","😇":"angel halo innocent","🥰":"smiling hearts love","😍":"heart eyes love beautiful","🤩":"star struck excited wow","😘":"face blowing kiss love","😗":"kissing face","😚":"kissing closed eyes","😙":"kissing smiling eyes","🥲":"smiling tear emotional","😋":"yum delicious tongue food","😛":"tongue face playful","😜":"winking tongue playful","🤪":"zany crazy silly","😝":"squinting tongue funny","🤑":"money face rich dollar","🤗":"hugging face warm","🤭":"face hand hmm oops","🤫":"shushing quiet secret","🤔":"thinking hmm ponder","🤐":"zipper mouth silent secret","🤨":"raised eyebrow skeptical","😐":"neutral face blank expressionless","😑":"expressionless face","😶":"no mouth silent","😏":"smirking face smug","😒":"unamused face annoyed","🙄":"rolling eyes annoyed","😬":"grimacing nervous awkward","🤥":"lying pinocchio face","😌":"relieved calm peaceful","😔":"pensive sad thoughtful","😪":"sleepy tired","🤤":"drooling hungry","😴":"sleeping tired zzz","😷":"face mask sick covid","🤒":"thermometer sick fever","🤕":"head bandage hurt injured","🤢":"nauseated sick disgusted vomit","🤮":"vomiting sick disgusted","🤧":"sneezing sick cold","🥵":"hot face overheated","🥶":"cold face freezing","🥴":"woozy dizzy drunk","😵":"dizzy face dead","🤯":"exploding head mind blown","🤠":"cowboy hat face western","🥳":"party face celebrate","🥸":"disguise glasses nerd","😎":"cool sunglasses awesome","🤓":"nerd glasses smart","🧐":"monocle face detective","😕":"confused face worried","😟":"worried face anxious","🙁":"slightly frowning face sad","☹️":"frowning face sad","😮":"open mouth surprised","😯":"hushed surprised quiet","😲":"astonished shocked wow","😳":"flushed embarrassed red","🥺":"pleading puppy eyes","😦":"frowning open mouth","😧":"anguished face shocked","😨":"fearful scared afraid","😰":"anxious sweat nervous","😥":"sad relieved disappointed","😢":"crying tear sad","😭":"loudly crying sob tears","😱":"screaming fear horror","😖":"confounded frustrated","😣":"persevering struggle","😞":"disappointed sad","😓":"downcast sweat","😩":"weary tired exhausted","😫":"tired exhausted stressed","🥱":"yawning tired bored","😤":"steam nose triumph angry","😡":"pouting rage angry red","😠":"angry mad","🤬":"cursing swearing angry","😈":"smiling devil evil horns","👿":"angry devil evil","💀":"skull death dead","☠️":"skull crossbones death","💩":"pile poo shit funny","🤡":"clown face circus","👹":"ogre demon monster","👺":"goblin demon red","👻":"ghost halloween spooky","👽":"alien ufo extraterrestrial","👾":"alien monster game","🤖":"robot machine ai",
+  "👋":"waving hand hello bye","🤚":"raised back hand stop","🖐":"hand fingers splayed","✋":"raised hand stop high five","🖖":"vulcan salute spock","👌":"ok hand perfect","🤌":"pinched fingers italian gesture","🤏":"pinching hand small","✌️":"victory peace sign","🤞":"crossed fingers luck","🤟":"love you gesture","🤘":"sign horns rock","🤙":"call me hand shaka","👈":"backhand pointing left","👉":"backhand pointing right","👆":"pointing up","🖕":"middle finger rude","👇":"pointing down","☝️":"pointing up index","👍":"thumbs up like approve","👎":"thumbs down dislike","✊":"raised fist power","👊":"oncoming fist punch","🤛":"left fist bump","🤜":"right fist bump","👏":"clapping hands applause bravo","🙌":"raising hands celebrate","👐":"open hands","🤲":"palms up together","🤝":"handshake deal agreement","🙏":"folded hands pray please namaste","✍️":"writing hand pen","💅":"nail polish nails beauty","🤳":"selfie photo","💪":"flexed muscle strong bicep","🦾":"mechanical arm robot","🦵":"leg kick","🦶":"foot kick","👂":"ear listen","🦻":"ear hearing aid","👃":"nose smell","🧠":"brain mind smart","🦷":"tooth dental","🦴":"bone dog skeleton","👀":"eyes look see watching","👁":"eye look","👅":"tongue taste lick","👄":"mouth lips kiss","💋":"kiss mark lips","🫦":"biting lip","👶":"baby infant","👦":"boy child","👧":"girl child","👨":"man male","👩":"woman female","👴":"old man elderly","👵":"old woman elderly",
+  "❤️":"red heart love","🧡":"orange heart","💛":"yellow heart","💚":"green heart","💙":"blue heart","💜":"purple heart","🖤":"black heart","🤍":"white heart","🤎":"brown heart","💔":"broken heart sad","❣️":"heart exclamation","💕":"two hearts love","💞":"revolving hearts","💓":"beating heart love","💗":"growing heart","💖":"sparkling heart","💘":"heart arrow cupid love","💝":"heart ribbon gift","💟":"heart decoration","♥️":"heart suit cards","❤️‍🔥":"heart on fire passion","❤️‍🩹":"mending heart healing","🫶":"heart hands love","💌":"love letter envelope","💋":"kiss lips love",
+  "🐶":"dog puppy pet","🐱":"cat kitty pet","🐭":"mouse rodent","🐹":"hamster pet","🐰":"rabbit bunny","🦊":"fox sly","🐻":"bear animal","🐼":"panda bear","🐨":"koala bear","🐯":"tiger big cat","🦁":"lion king","🐮":"cow moo","🐷":"pig oink","🐸":"frog green","🐵":"monkey face","🙈":"see no evil monkey","🙉":"hear no evil monkey","🙊":"speak no evil monkey","🐒":"monkey animal","🦆":"duck bird","🐧":"penguin bird cold","🐦":"bird","🐤":"baby chick yellow","🦅":"eagle bird","🦉":"owl bird wise","🦇":"bat night","🐺":"wolf howl","🐴":"horse animal","🦄":"unicorn magic rainbow","🐝":"bee honey insect","🦋":"butterfly insect","🐞":"ladybug insect red","🐢":"turtle slow reptile","🐍":"snake reptile","🦎":"lizard reptile","🐙":"octopus sea tentacles","🦑":"squid sea","🦀":"crab seafood","🐠":"tropical fish sea","🐟":"fish sea","🐬":"dolphin sea smart","🐳":"whale water","🦈":"shark sea","🐘":"elephant big","🦒":"giraffe tall","🐕":"dog pet","🐈":"cat pet",
+  "🌸":"cherry blossom flower pink spring","🌺":"hibiscus flower tropical","🌻":"sunflower yellow","🌹":"rose flower love red","🥀":"wilted flower sad","🌷":"tulip flower","🌼":"blossom flower yellow","💐":"bouquet flowers","🍀":"four leaf clover luck","🌿":"herb green plant","🌱":"seedling plant grow","🌲":"evergreen tree","🌳":"tree deciduous","🌴":"palm tree tropical","🌵":"cactus desert","🍃":"leaf green nature","🍂":"fallen leaf autumn","🍁":"maple leaf autumn canada","🌾":"sheaf rice wheat","🍄":"mushroom fungi","🌊":"water wave ocean sea","🌈":"rainbow colorful","⚡":"lightning bolt electric storm","❄️":"snowflake cold winter ice","🔥":"fire hot flame","💧":"droplet water","🌍":"earth globe africa europe","🌎":"earth globe americas","🌏":"earth globe asia","🌙":"crescent moon night","🌟":"glowing star shine","💫":"dizzy star","✨":"sparkles shine magic","☀️":"sun sunny warm","☁️":"cloud weather","🌪":"tornado wind storm",
+  "🍏":"green apple fruit","🍎":"red apple fruit","🍊":"orange fruit","🍋":"lemon sour yellow","🍌":"banana yellow fruit","🍉":"watermelon fruit summer","🍇":"grapes purple fruit","🍓":"strawberry fruit red","🫐":"blueberries fruit","🍒":"cherries fruit red","🍑":"peach fruit","🥭":"mango fruit tropical","🍍":"pineapple tropical","🥥":"coconut tropical","🥝":"kiwi fruit green","🍅":"tomato red vegetable","🥑":"avocado green healthy","🥦":"broccoli vegetable green","🌽":"corn vegetable yellow","🥕":"carrot orange vegetable","🌶":"hot pepper spicy red","🍕":"pizza food italian","🍔":"hamburger burger food","🍟":"fries fast food","🌮":"taco mexican food","🌯":"burrito wrap food","🍜":"ramen noodles soup","🍣":"sushi japanese food","🍦":"soft ice cream dessert","🍩":"donut dessert sweet","🍪":"cookie dessert sweet","🎂":"birthday cake celebration","🍰":"shortcake dessert slice","🧁":"cupcake dessert sweet","🍫":"chocolate candy sweet","🍬":"candy sweet","🍭":"lollipop candy sweet","☕":"coffee hot drink","🍵":"tea hot drink","🍺":"beer drink alcohol","🍷":"wine red drink","🥂":"champagne celebrate clink","🍸":"cocktail drink martini","🍹":"tropical drink cocktail","🧃":"juice drink box","🥤":"cup straw drink","🧋":"bubble tea boba drink",
+  "⚽":"soccer football sport","🏀":"basketball sport","🏈":"american football sport","🎾":"tennis sport","🏆":"trophy winner award champion","🥇":"gold medal first winner","🥈":"silver medal second","🥉":"bronze medal third","🏅":"medal sports award","🎯":"bullseye target dart","🎮":"video game controller gaming","🕹":"joystick game","🎲":"dice game random","🎱":"billiards pool 8ball","🏋️":"weight lifting gym strong","🚴":"cycling bike sport","🏊":"swimming sport water","🤸":"gymnastics cartwheel","🏄":"surfing wave sport","⛷":"skiing snow sport","🏂":"snowboarding snow sport","🎿":"skis snow sport",
+  "🚀":"rocket space launch","✈️":"airplane flight travel","🚁":"helicopter flight","🛸":"ufo flying saucer alien","🚂":"train locomotive steam","🚗":"car automobile red","🚕":"taxi cab yellow","🚙":"suv car","🚌":"bus transport","🚑":"ambulance emergency","🚒":"fire engine truck","🚓":"police car","🛻":"pickup truck","🚲":"bicycle bike","🛴":"scooter kick","🚏":"bus stop","🏠":"house home","🏡":"house garden home","🏢":"office building","🏥":"hospital medical","🌋":"volcano fire mountain","🏔":"mountain snow","🏕":"camping tent","🏖":"beach umbrella summer","🏝":"island tropical",
+  "🎮":"video game controller","🎵":"music note song","🎶":"musical notes song","🎤":"microphone sing karaoke","🎧":"headphone music listen","🎸":"guitar music rock","🎹":"piano music keyboard","🎺":"trumpet music","🎷":"saxophone music jazz","🥁":"drum music beat","🎬":"clapper board movie film","📺":"television tv screen","📷":"camera photo picture","📸":"camera flash photo","💻":"laptop computer","📱":"phone mobile smartphone","⌨️":"keyboard type computer","🔑":"key lock open","🔒":"locked security","🔓":"unlocked open","🔨":"hammer tool","🔧":"wrench tool fix","💊":"pill medicine","💉":"syringe injection needle","🧸":"teddy bear toy","🎁":"gift present wrapped","🎀":"ribbon bow gift","🎊":"confetti ball celebrate","🎉":"party popper celebrate","🎈":"balloon party",
+  "❤️":"heart love red","✅":"check mark done correct","❌":"cross mark wrong no","🔴":"red circle","🟢":"green circle","🔵":"blue circle","⭐":"star favorite","💯":"hundred percent perfect score","🔥":"fire hot trending","⚠️":"warning caution alert","🚫":"prohibited no banned","❗":"exclamation important","❓":"question mark help","💤":"sleep zzz rest","🔔":"bell notification alert","🔕":"bell slash mute","📢":"loudspeaker announcement","📣":"megaphone cheer","♻️":"recycling green environment","🆗":"ok button","🆕":"new button","💠":"diamond blue","🔱":"trident emblem",
+};
+
 // Build flat emoji list for search
 const allEmojis = [];
 categories.forEach(cat => {
-  cat.emojis.forEach(e => allEmojis.push({ emoji: e, cat: cat.name }));
+  cat.emojis.forEach(e => allEmojis.push({ emoji: e, cat: cat.name, name: emojiNames[e] || "" }));
 });
+
+// ── Top Recommended (recently clicked) ──────────────────────────────────────
+const MAX_RECENT = 20;
+function getRecent() {
+  try { return JSON.parse(localStorage.getItem("recentEmojis") || "[]"); } catch { return []; }
+}
+function saveRecent(list) {
+  localStorage.setItem("recentEmojis", JSON.stringify(list));
+}
+function addToRecent(emoji) {
+  let list = getRecent().filter(e => e !== emoji);
+  list.unshift(emoji);
+  if (list.length > MAX_RECENT) list = list.slice(0, MAX_RECENT);
+  saveRecent(list);
+  renderRecommended();
+}
+
+function renderRecommended() {
+  const existing = document.getElementById("recommended-section");
+  if (existing) existing.remove();
+  const list = getRecent();
+  if (!list.length) return;
+
+  const content = document.getElementById("content");
+  const section = document.createElement("div");
+  section.className = "section";
+  section.id = "recommended-section";
+
+  const header = document.createElement("div");
+  header.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;";
+
+  const h2 = document.createElement("h2");
+  h2.style.margin = "0";
+  h2.innerHTML = "⭐ TOP RECOMMENDED";
+
+  const clearBtn = document.createElement("button");
+  clearBtn.textContent = "Clear";
+  clearBtn.style.cssText = "background:#2a2a3e;border:1px solid #444;color:#aaa;padding:4px 12px;border-radius:20px;cursor:pointer;font-size:0.78rem;";
+  clearBtn.onclick = () => { saveRecent([]); renderRecommended(); };
+
+  header.appendChild(h2);
+  header.appendChild(clearBtn);
+  section.appendChild(header);
+
+  const grid = document.createElement("div");
+  grid.className = "grid";
+  list.forEach(e => grid.appendChild(makeBtn(e)));
+  section.appendChild(grid);
+
+  content.insertBefore(section, content.firstChild);
+}
 
 let activeTab = "all";
 
@@ -262,8 +327,12 @@ function render(query = "") {
   const q = query.trim().toLowerCase();
 
   if (q) {
-    // Search mode — flat list
-    const matches = allEmojis.filter(item => item.emoji.includes(q) || item.cat.toLowerCase().includes(q));
+    // Search by emoji name or category
+    const matches = allEmojis.filter(item =>
+      item.name.toLowerCase().includes(q) ||
+      item.cat.toLowerCase().includes(q) ||
+      item.emoji.includes(q)
+    );
     if (!matches.length) {
       content.innerHTML = `<p class="no-results">No emojis found for "${q}" 😢</p>`;
       return;
@@ -281,6 +350,7 @@ function render(query = "") {
     return;
   }
 
+  // Show all categories, then inject recommended on top
   const list = activeTab === "all" ? categories : categories.filter(c => c.name === activeTab);
   list.forEach(cat => {
     const section = document.createElement("div");
@@ -294,13 +364,16 @@ function render(query = "") {
     section.appendChild(grid);
     content.appendChild(section);
   });
+
+  renderRecommended();
 }
 
 function makeBtn(emoji) {
   const btn = document.createElement("button");
   btn.className = "emoji-btn";
   btn.textContent = emoji;
-  btn.title = "Click to copy";
+  const name = emojiNames[emoji] ? emojiNames[emoji].split(" ").slice(0,3).join(", ") : "";
+  btn.title = name || "Click to copy";
   btn.onclick = () => copyEmoji(emoji, btn);
   return btn;
 }
@@ -311,6 +384,7 @@ function copyEmoji(emoji, btn) {
     btn.classList.add("copied");
     setTimeout(() => btn.classList.remove("copied"), 1000);
     showToast(`Copied ${emoji}`);
+    addToRecent(emoji);
   });
 }
 
