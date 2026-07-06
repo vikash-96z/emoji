@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EmojiClick 🎉</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f1a;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #6c63ff, #e040fb);
+      padding: 28px 20px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      margin-top: 6px;
+      opacity: 0.85;
+      font-size: 0.95rem;
+    }
+
+    .search-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 20px 16px 10px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      max-width: 480px;
+      padding: 12px 18px;
+      border-radius: 50px;
+      border: 2px solid #6c63ff;
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-wrap input::placeholder { color: #888; }
+    .search-wrap input:focus { border-color: #e040fb; }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      padding: 12px 16px;
+    }
+
+    .tab {
+      background: #1a1a2e;
+      border: 2px solid #333;
+      color: #ccc;
+      padding: 6px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .tab:hover { border-color: #6c63ff; color: #fff; }
+    .tab.active { background: #6c63ff; border-color: #6c63ff; color: #fff; font-weight: 600; }
+
+    .section {
+      padding: 10px 16px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section h2 {
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .emoji-btn {
+      font-size: 1.8rem;
+      background: #1a1a2e;
+      border: 2px solid #2a2a3e;
+      border-radius: 12px;
+      width: 58px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s, background 0.15s;
+      position: relative;
+      user-select: none;
+    }
+
+    .emoji-btn:hover {
+      background: #25253a;
+      border-color: #6c63ff;
+      transform: scale(1.15);
+    }
+
+    .emoji-btn:active { transform: scale(0.95); }
+
+    .emoji-btn.copied {
+      border-color: #4caf50;
+      background: #1b3a1e;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #6c63ff;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(108,99,255,0.5);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .no-results {
+      text-align: center;
+      color: #666;
+      padding: 40px;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎉 EmojiClick</h1>
+  <p>Click any emoji to copy it instantly!</p>
+</header>
+
+<div class="search-wrap">
+  <input type="text" id="search" placeholder="🔍 Search emojis..." />
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div id="content"></div>
+
+<div id="toast">Copied! ✓</div>
+
+<script>
+const categories = [
+  {
+    name: "😀 Smileys",
+    emojis: ["😀","😃","😄","😁","😆","😅","🤣","😂","🙂","🙃","😉","😊","😇","🥰","😍","🤩","😘","😗","😚","😙","🥲","😋","😛","😜","🤪","😝","🤑","🤗","🤭","🤫","🤔","🤐","🤨","😐","😑","😶","😏","😒","🙄","😬","🤥","😌","😔","😪","🤤","😴","😷","🤒","🤕","🤢","🤮","🤧","🥵","🥶","🥴","😵","🤯","🤠","🥳","🥸","😎","🤓","🧐","😕","😟","🙁","☹️","😮","😯","😲","😳","🥺","😦","😧","😨","😰","😥","😢","😭","😱","😖","😣","😞","😓","😩","😫","🥱","😤","😡","😠","🤬","😈","👿","💀","☠️","💩","🤡","👹","👺","👻","👽","👾","🤖"]
+  },
+  {
+    name: "👋 People",
+    emojis: ["👋","🤚","🖐","✋","🖖","👌","🤌","🤏","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦶","👂","🦻","👃","🫀","🫁","🧠","🦷","🦴","👀","👁","👅","👄","💋","🫦","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","🙍","🙎","🙅","🙆","💁","🙋","🧏","🙇","🤦","🤷"]
+  },
+  {
+    name: "❤️ Hearts",
+    emojis: ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟","♥️","❤️‍🔥","❤️‍🩹","🫶","💌","💋"]
+  },
+  {
+    name: "🐶 Animals",
+    emojis: ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐸","🐵","🙈","🙉","🙊","🐒","🦆","🐧","🐦","🐤","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🐛","🦋","🐌","🐞","🐜","🦟","🦗","🕷","🦂","🐢","🐍","🦎","🐊","🦕","🦖","🐙","🦑","🦐","🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🦣","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🦬","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐕‍🦺","🐈","🐈‍⬛","🪶","🐓","🦃","🦤","🦚","🦜","🦢","🦩","🕊","🐇","🦝","🦨","🦡","🦫","🦦","🦥","🐁","🐀","🐿","🦔"]
+  },
+  {
+    name: "🌸 Nature",
+    emojis: ["🌸","🌺","🌻","🌹","🥀","🌷","🌼","💐","🍀","🌿","🌱","🌲","🌳","🌴","🌵","🎋","🎍","🍃","🍂","🍁","🌾","🍄","🌰","🦠","🌊","🌬","🌀","🌈","⚡","❄️","🔥","💧","🌍","🌎","🌏","🌕","🌖","🌗","🌘","🌑","🌒","🌓","🌔","🌙","🌛","🌜","🌚","🌝","🌞","⭐","🌟","💫","✨","☀️","🌤","⛅","🌥","☁️","🌦","🌧","⛈","🌩","🌨","🌫","🌪"]
+  },
+  {
+    name: "🍕 Food",
+    emojis: ["🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🫐","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🫒","🥦","🥬","🥒","🌶","🫑","🌽","🥕","🧄","🧅","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩","🍗","🍖","🦴","🌭","🍔","🍟","🍕","🫓","🥪","🥙","🧆","🌮","🌯","🫔","🥗","🥘","🫕","🥫","🍱","🍘","🍙","🍚","🍛","🍜","🍝","🍠","🍢","🍣","🍤","🍥","🥮","🍡","🥟","🦪","🍦","🍧","🍨","🍩","🍪","🎂","🍰","🧁","🥧","🍫","🍬","🍭","🍮","🍯","🍼","🥛","☕","🫖","🍵","🧃","🥤","🧋","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧉","🍾"]
+  },
+  {
+    name: "⚽ Sports",
+    emojis: ["⚽","🏀","🏈","⚾","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🥍","🏏","🪃","🥅","⛳","🪁","🏹","🎣","🤿","🎽","🎿","🛷","🥌","🎯","🤺","🏇","⛷","🏂","🪂","🏋️","🤼","🤸","🤺","⛹️","🤾","🏌️","🏄","🚣","🧗","🚵","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🎗","🎫","🎟","🎪"]
+  },
+  {
+    name: "🚀 Travel",
+    emojis: ["🚀","✈️","🛸","🚁","🛶","⛵","🚤","🛥","🛳","⛴","🚢","🚂","🚃","🚄","🚅","🚆","🚇","🚈","🚉","🚊","🚞","🚝","🚋","🚌","🚍","🚎","🚐","🚑","🚒","🚓","🚔","🚕","🚖","🚗","🚘","🚙","🛻","🚚","🚛","🚜","🏎","🏍","🛵","🛺","🚲","🛴","🛹","🛼","🚏","🛣","🛤","⛽","🚧","⚓","🗺","🧭","🌋","🏔","⛰","🏕","🏖","🏜","🏝","🏗","🏘","🏚","🏠","🏡","🏢","🏣","🏤","🏥","🏦","🏨","🏩","🏪","🏫","🏬","🏭","🏯","🏰","💒","🗼","🗽","⛪","🕌","🛕","⛩","🕍"]
+  },
+  {
+    name: "🎮 Activities",
+    emojis: ["🎮","🕹","🎲","🎯","🎳","🎰","🎭","🎨","🖼","🎪","🎤","🎧","🎼","🎵","🎶","🥁","🪘","🎷","🎺","🎸","🪕","🎻","🎹","🪗","🎬","📽","🎞","📺","📷","📸","📹","🎙","📻","🎙","⌛","⏳","⏰","🕰","🧲","🔭","🔬","🧪","🧫","🧬","🔮","💎","🪩","🎁","🎀","🎊","🎉","🎈","🎆","🎇","🧨","✨","🎑","🎃","🎄","🎋","🎍","🎎","🎏","🎐"]
+  },
+  {
+    name: "💡 Objects",
+    emojis: ["💡","🔦","🕯","🪔","💰","💳","💎","🏺","📱","💻","🖥","🖨","⌨️","🖱","💽","💾","💿","📀","📷","📸","📹","📼","📠","☎️","📞","📟","📺","📻","⏱","⏲","⏰","🧭","📡","🔋","🪫","🔌","💡","🔦","🕯","🪔","🛢","💸","💵","💴","💶","💷","🪙","💳","🔑","🗝","🔐","🔒","🔓","🔏","🔨","🪓","⛏","⚒","🛠","🗡","⚔️","🛡","🔧","🔩","🪛","🗜","🔗","⛓","🪝","🧲","🪜","🧪","🧫","🧬","🔭","🔬","🩺","🩻","💊","💉","🩹","🩼","🧸","🪆","🪅","🎭","🎨","🖼","🪞","🪟","🛋","🪑","🚽","🚿","🛁"]
+  },
+  {
+    name: "🔣 Symbols",
+    emojis: ["❤️","✅","❌","⭕","🔴","🟠","🟡","🟢","🔵","🟣","⚫","⚪","🟤","🔶","🔷","🔸","🔹","🔺","🔻","💠","🔘","🔲","🔳","▪️","▫️","◾","◽","◼️","◻️","🟥","🟧","🟨","🟩","🟦","🟪","⬛","⬜","🟫","🔈","🔉","🔊","🔇","📢","📣","🔔","🔕","🎵","🎶","💤","🔅","🔆","📶","📳","📴","📵","📲","🔱","🔰","♻️","✅","❎","🆗","🆙","🆒","🆕","🆓","🔝","🛑","⛔","🚫","🚳","🚭","🚯","🚱","🚷","📵","❗","❕","❓","❔","‼️","⁉️","💯","🔃","🔄","🔙","🔚","🔛","🔜","🔝"]
+  }
+];
+
+// Build flat emoji list for search
+const allEmojis = [];
+categories.forEach(cat => {
+  cat.emojis.forEach(e => allEmojis.push({ emoji: e, cat: cat.name }));
+});
+
+let activeTab = "all";
+
+// Render tabs
+const tabsEl = document.getElementById("tabs");
+const allTab = document.createElement("button");
+allTab.className = "tab active";
+allTab.textContent = "All";
+allTab.dataset.cat = "all";
+allTab.onclick = () => setTab("all");
+tabsEl.appendChild(allTab);
+
+categories.forEach(cat => {
+  const btn = document.createElement("button");
+  btn.className = "tab";
+  btn.textContent = cat.name;
+  btn.dataset.cat = cat.name;
+  btn.onclick = () => setTab(cat.name);
+  tabsEl.appendChild(btn);
+});
+
+function setTab(name) {
+  activeTab = name;
+  document.querySelectorAll(".tab").forEach(t => {
+    t.classList.toggle("active", t.dataset.cat === name);
+  });
+  render();
+}
+
+function render(query = "") {
+  const content = document.getElementById("content");
+  content.innerHTML = "";
+  const q = query.trim().toLowerCase();
+
+  if (q) {
+    // Search mode — flat list
+    const matches = allEmojis.filter(item => item.emoji.includes(q) || item.cat.toLowerCase().includes(q));
+    if (!matches.length) {
+      content.innerHTML = `<p class="no-results">No emojis found for "${q}" 😢</p>`;
+      return;
+    }
+    const section = document.createElement("div");
+    section.className = "section";
+    const h2 = document.createElement("h2");
+    h2.textContent = `Results (${matches.length})`;
+    section.appendChild(h2);
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    matches.forEach(item => grid.appendChild(makeBtn(item.emoji)));
+    section.appendChild(grid);
+    content.appendChild(section);
+    return;
+  }
+
+  const list = activeTab === "all" ? categories : categories.filter(c => c.name === activeTab);
+  list.forEach(cat => {
+    const section = document.createElement("div");
+    section.className = "section";
+    const h2 = document.createElement("h2");
+    h2.textContent = cat.name;
+    section.appendChild(h2);
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    cat.emojis.forEach(e => grid.appendChild(makeBtn(e)));
+    section.appendChild(grid);
+    content.appendChild(section);
+  });
+}
+
+function makeBtn(emoji) {
+  const btn = document.createElement("button");
+  btn.className = "emoji-btn";
+  btn.textContent = emoji;
+  btn.title = "Click to copy";
+  btn.onclick = () => copyEmoji(emoji, btn);
+  return btn;
+}
+
+let toastTimeout;
+function copyEmoji(emoji, btn) {
+  navigator.clipboard.writeText(emoji).then(() => {
+    btn.classList.add("copied");
+    setTimeout(() => btn.classList.remove("copied"), 1000);
+    showToast(`Copied ${emoji}`);
+  });
+}
+
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg + " ✓";
+  toast.classList.add("show");
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
+document.getElementById("search").addEventListener("input", e => {
+  render(e.target.value);
+});
+
+render();
+</script>
+</body>
+</html>
